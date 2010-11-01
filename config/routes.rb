@@ -1,12 +1,19 @@
 Asamblea::Application.routes.draw do
-  resources :groups
 
-  resources :activities
+  scope(:path_names => { :new => "nuevo", :edit => "editar" }) do
+    resources :assemblies, :path => 'asambleas'
+    resources :topics
+    resources(:agendas, :path => 'actas') do
+      resources :topics
+    end
+    resources :groups, :path => 'grupos'
+    resources :activities, :path => 'actividades'
+    resources :users, :path => 'personas'
+  end
 
-  root :to => "users#index"
+  root :to => "agendas#index"
+
   devise_for :users
-  resources :users
-  resources :activities
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -61,7 +68,5 @@ Asamblea::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
+
 end
